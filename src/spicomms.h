@@ -27,9 +27,6 @@ extern "C" {
 #define SPI_DEV DT_LABEL(DT_ALIAS(spi_0))
 
 
-
-
-
 void startSPICommCenter();
 void transmit(u8_t cmd, void *tx_data, size_t tx_len);
 void transmitData(void *tx_data, size_t tx_len);

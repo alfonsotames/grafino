@@ -14,6 +14,7 @@
 #include "ili9163.h"
 #include "colors.h"
 
+
 #define GPIO_DRV_NAME DT_LABEL(DT_ALIAS(port_a))
 
 
@@ -53,10 +54,13 @@ void main(void) {
 
     startSPICommCenter();
     tft_initDisplay();
-    tft_fillScreen(BLUE);
 
-
-    u16_t colores[] = {RED,GREEN,BLUE,MAGENTA,YELLOW,CYAN,BLACK,MAGENTA};
+    
+    //tft_drawPixel(30,60,RED);
+    //tft_fillRect(30,80,1,20,MAGENTA,MAGENTA);
+    //tft_drawLine(0,0,128,160,RED);
+    
+    //u16_t colores[] = {RED,GREEN,BLUE,MAGENTA,YELLOW,CYAN,BLACK,MAGENTA};
 
 
 
@@ -66,10 +70,26 @@ void main(void) {
     while (1) {
 
 
+            tft_fillScreen(BLACK);
+         //   tft_setCursor(0,0);
+        //tft_textWrite("TEMP", 4);
+        k_msleep(250);
+            tft_fillScreen(BLACK);
+            tft_setCursor(5,5);
+            tft_textWrite("HOLA", 4);
+        //tft_fillScreen(colores[cnt]);
+        k_msleep(250);
 
-                tft_fillScreen(colores[cnt]);
-
-
+/*
+        int sx = 0;
+        int sy = 0;
+        for (int n=0; n<=14;n=n+1) {
+            tft_drawFastHLine(8,10+sy,110,colores[cnt]);
+            tft_drawFastVLine(8+sx,10,140,colores[cnt]);
+            if (sx < 110) sx = sx+10;
+            if (sy <140) sy = sy+10;
+        }
+        */
 
         /********************Leds and Whistles  *******************************/
         gpio_pin_set(gpio_dev, 17, (int) led_is_on);
@@ -83,7 +103,7 @@ void main(void) {
             idx = 0;
         }
         cnt++;
-                if (cnt == 7) {
+        if (cnt == 6) {
             cnt=0;
         }
         k_msleep(250);
