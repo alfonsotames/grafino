@@ -13,20 +13,20 @@
   struct spi_config spi_cfg;
 
 void startSPICommCenter() {
-    printk("Configuring pins...\n");
+    //printk("Configuring pins...\n");
         if (gpio_dev == NULL) {
-        printk("GPIO Device not initialized!\n");
+        //printk("GPIO Device not initialized!\n");
         return;
     }  
     
     gpio_pin_configure(gpio_dev, 7, GPIO_OUTPUT_ACTIVE);
 
-    printk("Populating strcut cs_ctrl...\n");
+    //printk("Populating strcut cs_ctrl...\n");
     cs_ctrl.gpio_dev = gpio_dev;
     cs_ctrl.gpio_pin = 18;
     cs_ctrl.delay = 50;
     
-    printk("Populating struct spi_cfg...\n");
+    //printk("Populating struct spi_cfg...\n");
     spi_cfg.operation  = SPI_OP_MODE_MASTER | SPI_WORD_SET(8) | SPI_TRANSFER_MSB;
     spi_cfg.frequency = 20000000;
     spi_cfg.slave = 0;
@@ -34,13 +34,13 @@ void startSPICommCenter() {
     
     
     
-    printk("Configuring pins for SPI's D/C (Data Command) and CS (Chip Select)\n");
+    //printk("Configuring pins for SPI's D/C (Data Command) and CS (Chip Select)\n");
     gpio_pin_configure(spi_cfg.cs->gpio_dev, spi_cfg.cs->gpio_pin, GPIO_OUTPUT_ACTIVE);
     gpio_pin_configure(gpio_dev, 7, GPIO_OUTPUT_ACTIVE);
-    printk("Getting SPI device binding...\n");
+    //printk("Getting SPI device binding...\n");
     spi_dev = device_get_binding(SPI_DEV);
     
-    printk("SPI Comm Center Initialization Complete\n");
+    //printk("SPI Comm Center Initialization Complete\n");
 }
 
 

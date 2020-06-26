@@ -36,7 +36,7 @@ void main(void) {
 
     gpio_dev = device_get_binding(GPIO_DRV_NAME);
     if (gpio_dev == NULL) {
-        printk("Could not get %s device\n", GPIO_DRV_NAME);
+        //printk("Could not get %s device\n", GPIO_DRV_NAME);
         return;
     }
 
@@ -50,7 +50,7 @@ void main(void) {
     /*****************************Backlight**********************************/
     gpio_pin_configure(gpio_dev, 16, GPIO_OUTPUT_ACTIVE);
 
-    printk("SPI Init ...\n");
+    //printk("SPI Init ...\n");
 
     startSPICommCenter();
     tft_initDisplay();
@@ -60,36 +60,55 @@ void main(void) {
     //tft_fillRect(30,80,1,20,MAGENTA,MAGENTA);
     //tft_drawLine(0,0,128,160,RED);
     
-    //u16_t colores[] = {RED,GREEN,BLUE,MAGENTA,YELLOW,CYAN,BLACK,MAGENTA};
+    u16_t colores[] = {RED,GREEN,BLUE,MAGENTA,YELLOW,CYAN,BLACK,MAGENTA};
 
 
 
     bool led_is_on = true;
     u8_t idx = 0;
-    u8_t cnt = 0;
+    int cnt = 0;
     while (1) {
 
 
             tft_fillScreen(BLACK);
-         //   tft_setCursor(0,0);
-        //tft_textWrite("TEMP", 4);
-        k_msleep(250);
-            tft_fillScreen(BLACK);
-            tft_setCursor(5,5);
-            tft_textWrite("HOLA", 4);
-        //tft_fillScreen(colores[cnt]);
-        k_msleep(250);
 
-/*
+        
+            
+
+
         int sx = 0;
         int sy = 0;
-        for (int n=0; n<=14;n=n+1) {
-            tft_drawFastHLine(8,10+sy,110,colores[cnt]);
-            tft_drawFastVLine(8+sx,10,140,colores[cnt]);
-            if (sx < 110) sx = sx+10;
-            if (sy <140) sy = sy+10;
+        for (int n = 0; n <= 14; n = n + 1) {
+            tft_drawFastHLine(8, 10 + sy, 110, colores[cnt]);
+            tft_drawFastVLine(8 + sx, 10, 140, colores[cnt]);
+            if (sx < 110) sx = sx + 10;
+            if (sy < 140) sy = sy + 10;
         }
-        */
+
+        
+         
+        k_msleep(250);
+       
+            //tft_fillScreen(BLACK);
+            tft_setCursor(25,(cnt*20)+2);
+            
+            tft_drawFastHLine(20,(cnt*20),80,RED);
+            tft_drawFastHLine(20,(cnt*20)+46,80,RED);
+            tft_drawFastVLine(20,(cnt*20),46,RED);
+            tft_drawFastVLine(100,(cnt*20),46,RED);
+            
+            char buf[3];
+            buf[0] = 'A';
+            buf[1] = 'B';
+            buf[2] = cnt+'0';
+            
+        tft_textWrite(buf, 3);
+        
+ 
+
+
+
+        
 
         /********************Leds and Whistles  *******************************/
         gpio_pin_set(gpio_dev, 17, (int) led_is_on);
@@ -106,6 +125,6 @@ void main(void) {
         if (cnt == 6) {
             cnt=0;
         }
-        k_msleep(250);
+        k_msleep(400);
     }
 }

@@ -56,24 +56,27 @@
         bool image_comp;
     } tPicture;    
 
-    extern int16_t       _centerText;
-    extern int16_t  _textScaleX;
-    extern int16_t  _textScaleY;
-    extern  const tFont *_currentFont;
-    extern bool  _portrait;
-    extern int16_t  _cursorX;
-    extern int16_t  _cursorY;
-    extern  int16_t _width;
-    extern int16_t _height;
-    extern int16_t  _spaceCharWidth;
-    extern int16_t  _charSpacing;
-    extern int16_t  _fontRemapOffset;
-    extern int16_t  _fontInterline;
-    extern uint16_t  _textBackground;
-    extern uint16_t  _textForeground;
-    extern bool  _textWrap;
-    extern int16_t charW;
 
+
+    extern uint8_t _centerText;
+    extern volatile int _textScaleX;
+    extern volatile int _textScaleY;
+    extern const tFont *_currentFont;
+    extern bool _portrait;
+    extern volatile int _cursorX;
+    extern volatile int _cursorY;
+    extern int16_t _width;
+    extern int16_t _height;
+    extern int _spaceCharWidth;
+    extern volatile int _charSpacing;
+    extern uint8_t _fontRemapOffset;
+    extern int16_t _fontInterline;
+    extern uint16_t _textBackground;
+    extern uint16_t _textForeground;
+    extern bool _textWrap; 
+    extern volatile int charW;
+
+    extern int16_t posX;
 
 #ifndef _swap_int16_t
 #define _swap_int16_t(a, b)                                                    \
@@ -92,21 +95,33 @@
 
 
     void tft_initDisplay();
-    void tft_setAddrWindow(int16_t x0, int16_t y0, int16_t x1, int16_t y1);
+    void tft_setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
     void tft_fillScreen(uint16_t color16);
-    void tft_drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
-    void tft_drawFastVLine(int16_t x, int16_t y, int16_t w, uint16_t color);
+    void tft_drawFastHLine(int x, int y, int w, uint16_t color);
+    void tft_drawFastVLine(int x, int y, int w, uint16_t color);
     void tft_pushColors(uint16_t color16, int16_t times);
-    void tft_drawPixel(int16_t x, int16_t y, uint16_t color);
-    void tft_fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color1, uint16_t color2);
+    void tft_drawPixel(int x, int y, uint16_t color);
+    void tft_fillRect(int x, int y, int w, int h, uint16_t color1, uint16_t color2);
     void tft_drawLine(int16_t x0, int16_t y0,int16_t x1, int16_t y1, uint16_t color);
     int  tft_getCharCode(uint8_t ch);
     void tft_setFont(const tFont *font);
     bool tft_renderSingleChar(const char c);
     int tft_STRlen_helper(const char* buffer,int len);
     void tft_textWrite(const char* buffer, int16_t len);
-    void tft_setCursor(int16_t x, int16_t y);
-
+    void tft_setCursor(int x, int y);
+    void tft_glyphRender_unc(
+									const 		uint8_t *pixelsArray,
+									int 	x,
+									int 	y,
+									int 		glyphWidth,
+									int 		glyphHeight,
+									int 	scaleX,
+									int	 	scaleY,
+									uint16_t 	totalBytes,
+									int 	cspacing,
+									uint16_t 	foreColor,
+									uint16_t 	backColor,
+									bool 		inverse);
 
 #ifdef __cplusplus
 }
