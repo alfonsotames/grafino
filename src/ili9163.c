@@ -214,21 +214,21 @@ void tft_drawFastVLine(int x, int y, int h, uint16_t color) {
 }
 
 
-void tft_fillRect(int x, int y, int w, int h, uint16_t color1, uint16_t color2) {
+void tft_fillRect(int x, int y, int w, int h, uint16_t color) {
     if (w < 2 && h < 2) {
-        tft_drawPixel(x, y, color1);
+        tft_drawPixel(x, y, color);
         return;
     }
     if (h < 2) {
-        tft_drawFastHLine(x, y, w, color1);
+        tft_drawFastHLine(x, y, w, color);
         return;
     }
     if (w < 2) {
-        tft_drawFastVLine(x, y, h, color1);
+        tft_drawFastVLine(x, y, h, color);
         return;
     }
     tft_setAddrWindow(x,y,(x+w)-1,(y+h)-1);
-    tft_pushColors(BLACK, w * h);
+    tft_pushColors(color, w * h);
 }
 
 
@@ -350,9 +350,7 @@ void tft_charLineRender(
 						y + (currentYposition * scaleY),
 						(endPix * scaleX),
 						scaleY,
-						WHITE,
-                                                        WHITE
-					);
+						WHITE);
 					
 				} else {
 					//do nothing
@@ -396,7 +394,7 @@ void tft_glyphRender_unc(
 	bool lineBuffer[glyphWidth+1];//the temporary line buffer
 	int lineChecksum = 0;//part of the optimizer
 	//Fill background if needed.
-	if (foreColor != backColor) tft_fillRect(x,y,((glyphWidth * scaleX) + (cspacing * scaleX)),(glyphHeight * scaleY),backColor,foreColor);
+	//if (foreColor != backColor) tft_fillRect(x,y,((glyphWidth * scaleX) + (cspacing * scaleX)),(glyphHeight * scaleY),backColor,foreColor);
 	//the main loop that will read all bytes of the glyph
 	while (currentByte < totalBytes){
 		//read n byte
@@ -422,8 +420,8 @@ void tft_glyphRender_unc(
 							tempYpos,
 							(glyphWidth * scaleX),
 							scaleY,
-							foreColor,
-							backColor
+							foreColor
+							
 					);
 				} else { 
 					//line render

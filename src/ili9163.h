@@ -101,7 +101,7 @@
     void tft_drawFastVLine(int x, int y, int w, uint16_t color);
     void tft_pushColors(uint16_t color16, int16_t times);
     void tft_drawPixel(int x, int y, uint16_t color);
-    void tft_fillRect(int x, int y, int w, int h, uint16_t color1, uint16_t color2);
+    void tft_fillRect(int x, int y, int w, int h, uint16_t color);
     void tft_drawLine(int16_t x0, int16_t y0,int16_t x1, int16_t y1, uint16_t color);
     int  tft_getCharCode(uint8_t ch);
     void tft_setFont(const tFont *font);

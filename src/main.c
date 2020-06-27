@@ -74,7 +74,7 @@ void main(void) {
 
         
             
-
+/*
         int sx = 0;
         int sy = 0;
         for (int n = 0; n <= 14; n = n + 1) {
@@ -83,7 +83,7 @@ void main(void) {
             if (sx < 110) sx = sx + 10;
             if (sy < 140) sy = sy + 10;
         }
-
+*/
       
          
             
