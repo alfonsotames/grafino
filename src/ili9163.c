@@ -17,8 +17,8 @@
     volatile int  _textScaleY = 1;
       const tFont *_currentFont;
     bool  _portrait = false;
-    volatile int  _cursorX=0;
-    volatile int  _cursorY=0;
+     int  _cursorX=0;
+     int  _cursorY=0;
      int16_t _width =128;
     int16_t _height=160;
     int  _spaceCharWidth = 0;
@@ -28,7 +28,7 @@
     uint16_t  _textBackground = BLACK;
     uint16_t  _textForeground = WHITE;
     bool  _textWrap = false; // mucho mas rapido cuando es falso
-    volatile int charW = 0;
+     int charW = 0;
     
     int16_t posX = 0;
      
@@ -123,7 +123,8 @@ void tft_initDisplay() {
 }
 
 
-void tft_setAddrWindow(uint16_t x0,uint16_t y0, uint16_t x1, uint16_t y1) {
+void tft_setAddrWindow(int x0, int y0, int x1, int y1) {
+
     
     // Cols
     transmitCommand(CMD_CLMADRS);
@@ -227,7 +228,7 @@ void tft_fillRect(int x, int y, int w, int h, uint16_t color1, uint16_t color2) 
         return;
     }
     tft_setAddrWindow(x,y,(x+w)-1,(y+h)-1);
-    tft_pushColors(color1, w * h);
+    tft_pushColors(BLACK, w * h);
 }
 
 
@@ -349,8 +350,8 @@ void tft_charLineRender(
 						y + (currentYposition * scaleY),
 						(endPix * scaleX),
 						scaleY,
-						foreColor,
-						foreColor
+						WHITE,
+                                                        WHITE
 					);
 					
 				} else {
@@ -377,7 +378,7 @@ void tft_glyphRender_unc(
 									int 		glyphHeight,
 									int 	scaleX,
 									int	 	scaleY,
-									uint16_t 	totalBytes,
+									int 	totalBytes,
 									int 	cspacing,
 									uint16_t 	foreColor,
 									uint16_t 	backColor,
@@ -386,12 +387,12 @@ void tft_glyphRender_unc(
     //printk("tft_glyphRender_unc x: %" PRId16 "\n",x);
 	//start by getting some glyph data...
 	int i;
-	int temp = 0;
+	uint8_t temp = 0;
 	//some basic variable...
 	int currentXposition = 0;//the current position of the writing cursor in the x axis, from 0 to glyphWidth
 	int currentYposition = 0;//the current position of the writing cursor in the y axis, from 0 to _FNTheight
 	int tempYpos = 0;
-	uint16_t currentByte = 0;//the current byte in reading (from 0 to totalBytes)
+	int currentByte = 0;//the current byte in reading (from 0 to totalBytes)
 	bool lineBuffer[glyphWidth+1];//the temporary line buffer
 	int lineChecksum = 0;//part of the optimizer
 	//Fill background if needed.
@@ -456,31 +457,12 @@ bool tft_renderSingleChar(const char c)
 
 				charW = _currentFont->chars[charIndex].image->image_width;
 
-
-				if (_portrait){
-					if (_cursorY + (charW * _textScaleY) + (_charSpacing * _textScaleY) >= _width) {
-                                            //printk("******* Si portrait pero REGRESO 1 *******");
-                                            return 1;
-                                        
-				} else {
-					if (_cursorX + (charW * _textScaleX) + (_charSpacing * _textScaleX) >= _width) {
-                                            //printk("******* no portrait pero REGRESO 1 *******");
-                                            return 1;
-                                        }
-				}
-			}
 			//-------------------------Actual single char drawing here -----------------------------------
 
 				const _smCharType * charGlyp = _currentFont->chars[charIndex].image->data;
 				int totalBytes = _currentFont->chars[charIndex].image->image_datalen;
 
-			if (!_portrait){
-				if (_cursorY + (_currentFont->font_height * _textScaleY) > _height) {
-                                    //printk("Too High! %i > %i\n",_cursorY + (_currentFont->font_height * _textScaleY),_height);
-                                    return 1;//too high!
-                                }
-                                
-                                
+                                //printk("_cursorX: %d  charW: %d\n",_cursorX,charW);
                                 tft_glyphRender_unc(
 								charGlyp,
 								_cursorX,
@@ -498,27 +480,8 @@ bool tft_renderSingleChar(const char c)
 				//_cursorX += _cursorX + (charW * _textScaleX) + (_charSpacing * _textScaleX);//add charW to total
                                 
                                 _cursorX += charW;
-                                //posX = posX + 20;
-                               
-			} else {
-				if (_cursorX + (_currentFont->font_height * _textScaleX) > _width) return 1;//too high!
-				tft_glyphRender_unc(
-								charGlyp,
-								_cursorY,
-								_cursorX,
-								charW,
-								_currentFont->font_height,
-								_textScaleX,
-								_textScaleY,
-								totalBytes,
-								_charSpacing,
-								_textForeground,
-								_textBackground,
-								false
-				);
-				//_cursorY += (charW * _textScaleX) + (_charSpacing * _textScaleY);//add charW to total
-                                
-			}
+
+
 			return 0;
 
 	}//end char
@@ -526,35 +489,6 @@ bool tft_renderSingleChar(const char c)
 }
 
 
-int tft_STRlen_helper(const char* buffer,int len)
-{
-    //printk("tft_STRlen_helper\n");
-	int charIndex = -1;
-	int i;
-	//if (len < 1) len = strlen(buffer);		//try to get data from string
-	//if (len < 1) return 0;					//better stop here
-	if (_currentFont->font_widthType != 0){		// fixed width font
-		return ((len * _spaceCharWidth));
-	} else {								// variable width, need to loop trough entire string!
-		int totW = 0;
-		for (i = 0;i < len;i++){			//loop trough buffer
-			if (buffer[i] == 32){			//a space
-				totW += _spaceCharWidth;
-			} else if (buffer[i] != 13 && buffer[i] != 10 && buffer[i] != 32){//avoid special char
-				charIndex = tft_getCharCode(buffer[i]);
-				if (charIndex > -1) {		//found!
-					#if defined(_FORCE_PROGMEM__)
-						totW += (pgm_read_byte(&(_currentFont->chars[charIndex].image->image_width)));
-					#else
-						totW += (_currentFont->chars[charIndex].image->image_width);
-					#endif
-					totW += _charSpacing;
-				}
-			}//inside permitted chars
-		}//buffer loop
-		return totW;
-	}//end variable w font
-}
 
 void tft_textWrite(const char* buffer, int16_t len)
 {

@@ -9,7 +9,7 @@ Null Font v2.4
 
 #include <stdlib.h>
 
-#define _smCharType	u8_t
+#define _smCharType	uint8_t
 #define RLE_no  (0)
 #define RLE_yes (1)
 #define RLE_proportional (0)

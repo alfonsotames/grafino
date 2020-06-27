@@ -75,7 +75,6 @@ void main(void) {
         
             
 
-
         int sx = 0;
         int sy = 0;
         for (int n = 0; n <= 14; n = n + 1) {
@@ -85,30 +84,33 @@ void main(void) {
             if (sy < 140) sy = sy + 10;
         }
 
-        
+      
          
+            
+            
         k_msleep(250);
        
             //tft_fillScreen(BLACK);
-            tft_setCursor(25,(cnt*20)+2);
+            tft_setCursor(15,(cnt*20)+2);
             
-            tft_drawFastHLine(20,(cnt*20),80,RED);
-            tft_drawFastHLine(20,(cnt*20)+46,80,RED);
-            tft_drawFastVLine(20,(cnt*20),46,RED);
-            tft_drawFastVLine(100,(cnt*20),46,RED);
+            tft_drawFastHLine(10,(cnt*20),100,RED);
+            tft_drawFastHLine(10,(cnt*20)+46,100,RED);
+            tft_drawFastVLine(10,(cnt*20),46,RED);
+            tft_drawFastVLine(110,(cnt*20),46,RED);
             
-            char buf[3];
+            char buf[4];
             buf[0] = 'A';
             buf[1] = 'B';
-            buf[2] = cnt+'0';
+            buf[2] = 'C';
+            buf[3] = cnt+'0';
             
-        tft_textWrite(buf, 3);
+       tft_textWrite(buf, 4);
         
  
 
 
 
-        
+    
 
         /********************Leds and Whistles  *******************************/
         gpio_pin_set(gpio_dev, 17, (int) led_is_on);

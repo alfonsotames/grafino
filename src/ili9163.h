@@ -63,8 +63,8 @@
     extern volatile int _textScaleY;
     extern const tFont *_currentFont;
     extern bool _portrait;
-    extern volatile int _cursorX;
-    extern volatile int _cursorY;
+    extern  int _cursorX;
+    extern  int _cursorY;
     extern int16_t _width;
     extern int16_t _height;
     extern int _spaceCharWidth;
@@ -74,7 +74,7 @@
     extern uint16_t _textBackground;
     extern uint16_t _textForeground;
     extern bool _textWrap; 
-    extern volatile int charW;
+    extern  int charW;
 
     extern int16_t posX;
 
@@ -95,7 +95,7 @@
 
 
     void tft_initDisplay();
-    void tft_setAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
+    void tft_setAddrWindow(int x0, int y0, int x1, int y1);
     void tft_fillScreen(uint16_t color16);
     void tft_drawFastHLine(int x, int y, int w, uint16_t color);
     void tft_drawFastVLine(int x, int y, int w, uint16_t color);
@@ -106,22 +106,9 @@
     int  tft_getCharCode(uint8_t ch);
     void tft_setFont(const tFont *font);
     bool tft_renderSingleChar(const char c);
-    int tft_STRlen_helper(const char* buffer,int len);
     void tft_textWrite(const char* buffer, int16_t len);
     void tft_setCursor(int x, int y);
-    void tft_glyphRender_unc(
-									const 		uint8_t *pixelsArray,
-									int 	x,
-									int 	y,
-									int 		glyphWidth,
-									int 		glyphHeight,
-									int 	scaleX,
-									int	 	scaleY,
-									uint16_t 	totalBytes,
-									int 	cspacing,
-									uint16_t 	foreColor,
-									uint16_t 	backColor,
-									bool 		inverse);
+
 
 #ifdef __cplusplus
 }
