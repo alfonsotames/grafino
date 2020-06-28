@@ -54,9 +54,15 @@
         int16_t image_datalen;
         uint8_t image_depth;
         bool image_comp;
-    } tPicture;    
-
-
+    } tPicture;
+   
+    typedef struct {
+        const uint8_t *data; //B&W
+        uint8_t image_width;
+        uint8_t image_height;
+        uint16_t image_datalen;
+        bool image_comp;
+    } tIcon;
 
     extern uint8_t _centerText;
     extern volatile int _textScaleX;
@@ -108,7 +114,8 @@
     bool tft_renderSingleChar(const char c);
     void tft_textWrite(const char* buffer, int16_t len);
     void tft_setCursor(int x, int y);
-
+    void tft_drawIcon(int x, int y,const tIcon *icon,uint8_t scale,uint16_t f,uint16_t b,bool inverse);
+    void tft_drawIcons();
 
 #ifdef __cplusplus
 }

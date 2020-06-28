@@ -1,9 +1,7 @@
 
 /** SPI Communication Center **/
 
-#include <zephyr.h>
-#include <drivers/gpio.h>
-#include <drivers/spi.h>
+
 
 
 #ifndef SPICOMMS_H
@@ -13,7 +11,9 @@
 extern "C" {
 #endif
 
-
+#include <zephyr.h>
+#include <drivers/gpio.h>
+#include <drivers/spi.h>
 
 #define SEND_COMMAND 0
 #define SEND_DATA 1

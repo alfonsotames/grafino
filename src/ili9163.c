@@ -10,6 +10,7 @@
 #include "fonts/nullfont.c"
 #include "fonts/arial20.c"
 #include "fonts/temp.c"
+#include "icons/spkOn.c"
 
 
     uint8_t       _centerText = 0;
@@ -42,7 +43,7 @@ void tft_initDisplay() {
 
 
      
-    tft_setFont(&temp);
+    tft_setFont(&arial20);
 
     //Software reset -----
     transmitCommand(CMD_SWRESET);
@@ -170,11 +171,13 @@ void tft_fillScreen(uint16_t color16) {
 
 
 void tft_pushColors(uint16_t color16, int16_t times) {
+    
+    
     uint8_t bytes[2];
     bytes[0] =  *((uint8_t*)&(color16)+1); //high byte
     bytes[1] =  *((uint8_t*)&(color16)+0); //low byte
     startDataStream();
-    int bufflen = 2560;
+    int bufflen = 512;
     uint8_t buffer[bufflen];
     int i=0;
     int c=0;
@@ -190,10 +193,12 @@ void tft_pushColors(uint16_t color16, int16_t times) {
             i=0;
         }
     }
+    //printk("Faltan: %d\n",faltan);
     if (faltan > 0) {
         transmitData(&buffer, faltan);
     }
-    endDataStream();    
+    endDataStream();
+          
 }
 
 void tft_drawPixel(int x, int y, uint16_t color) {
@@ -215,6 +220,7 @@ void tft_drawFastVLine(int x, int y, int h, uint16_t color) {
 
 
 void tft_fillRect(int x, int y, int w, int h, uint16_t color) {
+    
     if (w < 2 && h < 2) {
         tft_drawPixel(x, y, color);
         return;
@@ -227,6 +233,7 @@ void tft_fillRect(int x, int y, int w, int h, uint16_t color) {
         tft_drawFastVLine(x, y, h, color);
         return;
     }
+     
     tft_setAddrWindow(x,y,(x+w)-1,(y+h)-1);
     tft_pushColors(color, w * h);
 }
@@ -335,6 +342,7 @@ void tft_charLineRender(
 	int px;
 	int endPix = 0;
 	bool refPixel = false;
+        
 	while (xlinePos < charW){
 		refPixel = lineBuffer[xlinePos];//xlinePos pix as reference value for next pixels
 		//detect and render concurrent pixels
@@ -345,12 +353,14 @@ void tft_charLineRender(
 			} else {
 				
 				if (refPixel) {
+                                    
 						tft_fillRect(
 						x,
 						y + (currentYposition * scaleY),
 						(endPix * scaleX),
 						scaleY,
 						WHITE);
+                                                
 					
 				} else {
 					//do nothing
@@ -363,6 +373,7 @@ void tft_charLineRender(
 			}
 		}
 	}//while
+        
 }
 
 
@@ -421,10 +432,10 @@ void tft_glyphRender_unc(
 							(glyphWidth * scaleX),
 							scaleY,
 							foreColor
-							
 					);
 				} else { 
 					//line render
+                                    
 					tft_charLineRender(
 							lineBuffer,
 							glyphWidth,
@@ -435,6 +446,7 @@ void tft_glyphRender_unc(
 							currentYposition,
 							foreColor
 					);
+                                     
 				}
 				currentYposition++;//next line
 				lineChecksum = 0;//reset checksum
@@ -447,6 +459,7 @@ void tft_glyphRender_unc(
 
 bool tft_renderSingleChar(const char c)
 {
+
 
 		int charIndex = tft_getCharCode(c);//get char code
 		if (charIndex > -1){//check if it's valid
@@ -461,6 +474,7 @@ bool tft_renderSingleChar(const char c)
 				int totalBytes = _currentFont->chars[charIndex].image->image_datalen;
 
                                 //printk("_cursorX: %d  charW: %d\n",_cursorX,charW);
+                                
                                 tft_glyphRender_unc(
 								charGlyp,
 								_cursorX,
@@ -478,8 +492,8 @@ bool tft_renderSingleChar(const char c)
 				//_cursorX += _cursorX + (charW * _textScaleX) + (_charSpacing * _textScaleX);//add charW to total
                                 
                                 _cursorX += charW;
-
-
+                                
+                                
 			return 0;
 
 	}//end char
@@ -509,6 +523,35 @@ void tft_textWrite(const char* buffer, int16_t len)
 
 
 
+void tft_drawIcon(int x, int y,const tIcon *icon,uint8_t scale,uint16_t f,uint16_t b,bool inverse)
+{
 
+		const uint8_t* iconData	= icon->data;//icon data
+		uint8_t		iWidth				= icon->image_width;
+		uint8_t		iHeight				= icon->image_height;
+		uint16_t	datalen				= icon->image_datalen;
+		//uint8_t		dataComp		= icon->image_comp;//not yet
+
+
+	//LGPO Rendering (uncomp)
+	tft_glyphRender_unc(
+					iconData,
+					x,
+					y,
+					iWidth,
+					iHeight,
+					scale,
+					scale,
+					datalen,
+					0,
+					f,
+					b,
+					inverse
+	);
+
+}
         
-        
+
+void tft_drawIcons() {
+    tft_drawIcon(80, 80,&spkOn, 1,WHITE,WHITE,false);
+}

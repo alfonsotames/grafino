@@ -7,13 +7,15 @@
 #include <zephyr.h>
 #include <drivers/gpio.h>
 #include <drivers/spi.h>
+#include <drivers/i2c.h>
 #include <string.h>
 #include "grafino.h"
 
 #include "dotstar.h"
 #include "ili9163.h"
 #include "colors.h"
-
+#include <stdio.h>
+#include "i2ccomms.h"
 
 #define GPIO_DRV_NAME DT_LABEL(DT_ALIAS(port_a))
 
@@ -23,7 +25,9 @@
 #define SLEEP_TIME_MS   250
 
 #define GPIO_DRV_NAME DT_LABEL(DT_ALIAS(port_a))
-#define SPI_DEV DT_LABEL(DT_ALIAS(spi_0))
+
+
+
 
 
 
@@ -53,6 +57,7 @@ void main(void) {
     //printk("SPI Init ...\n");
 
     startSPICommCenter();
+    startI2CCommCenter();
     tft_initDisplay();
 
     
@@ -60,9 +65,9 @@ void main(void) {
     //tft_fillRect(30,80,1,20,MAGENTA,MAGENTA);
     //tft_drawLine(0,0,128,160,RED);
     
-    u16_t colores[] = {RED,GREEN,BLUE,MAGENTA,YELLOW,CYAN,BLACK,MAGENTA};
+    uint16_t colores[] = {RED,GREEN,BLUE,MAGENTA,YELLOW,CYAN,BLACK,MAGENTA};
 
-
+       
 
     bool led_is_on = true;
     u8_t idx = 0;
@@ -84,30 +89,31 @@ void main(void) {
             if (sy < 140) sy = sy + 10;
         }
 */
-      
-         
-            
-            
-        k_msleep(250);
-       
-            //tft_fillScreen(BLACK);
-            tft_setCursor(15,(cnt*20)+2);
-            
-            tft_drawFastHLine(10,(cnt*20),100,RED);
-            tft_drawFastHLine(10,(cnt*20)+46,100,RED);
-            tft_drawFastVLine(10,(cnt*20),46,RED);
-            tft_drawFastVLine(110,(cnt*20),46,RED);
-            
-            char buf[4];
-            buf[0] = 'A';
-            buf[1] = 'B';
-            buf[2] = 'C';
-            buf[3] = cnt+'0';
-            
-       tft_textWrite(buf, 4);
-        
- 
 
+
+
+
+        k_msleep(250);
+
+        //tft_fillScreen(BLACK);
+        tft_setCursor(24, (cnt * 20) + 15);
+        uint16_t color = colores[cnt];
+        tft_drawFastHLine(10, (cnt * 20), 100, color);
+        tft_drawFastHLine(10, (cnt * 20) + 46, 100, color);
+        tft_drawFastVLine(10, (cnt * 20), 46, color);
+        tft_drawFastVLine(110, (cnt * 20), 46, color);
+
+        char buf[59];
+        sprintf(buf, "Alfonso %d", cnt);
+
+
+         //printk("Hola\n");
+         tft_textWrite(buf, 9);
+         //tft_drawIcons();
+         //tft_fillRect(80,80,10,10,RED);
+        
+        //i2c_test();
+        
 
 
     
