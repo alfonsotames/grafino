@@ -28,12 +28,12 @@ extern "C" {
 
 
 void startSPICommCenter();
-void transmit(u8_t cmd, void *tx_data, size_t tx_len);
+void transmit(uint8_t cmd, void *tx_data, size_t tx_len);
 void transmitData(void *tx_data, size_t tx_len);
-void transmitCommand(u8_t cmd);
+void transmitCommand(uint8_t cmd);
 void startDataStream();
 void endDataStream();
-void sendData16(u16_t data);
+void sendData16(uint16_t data);
 
 
 #ifdef __cplusplus

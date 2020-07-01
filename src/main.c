@@ -70,7 +70,7 @@ void main(void) {
        
 
     bool led_is_on = true;
-    u8_t idx = 0;
+    uint8_t idx = 0;
     int cnt = 0;
     while (1) {
 

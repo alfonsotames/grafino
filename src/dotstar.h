@@ -30,13 +30,13 @@
  * brightness is set very low, and RGB values are
  * set low too.
  */
-u32_t rgb[] = {
+uint32_t rgb[] = {
 	0x11FFFF00,
 	0x1100FF00,
 	0x11FF0000
 };
 
-void send_rgb(struct device *gpio_dev, u32_t rgb)
+void send_rgb(struct device *gpio_dev, uint32_t rgb)
 {
 	int i;
 	for (i = 0; i < 32; i++) {

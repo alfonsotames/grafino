@@ -153,7 +153,7 @@ void tft_fillScreen(uint16_t color16) {
     startDataStream();
     //We must send (TFT_ILI9163C_W*TFT_ILI9163C_W) * 2 bytes
     // buffer size for 16 sends
-    int bufflen = 2560;
+    int bufflen = 640;
     uint8_t buffer[bufflen];
     int i=0;
     int c=0;

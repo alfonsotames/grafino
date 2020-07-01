@@ -2,9 +2,39 @@
 <configurationDescriptor version="100">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="src" name="0">
+      <df name="fonts">
+        <in>Terminal_9.c</in>
+        <in>akasha_cap.c</in>
+        <in>akashi20.c</in>
+        <in>arial10.c</in>
+        <in>arial20.c</in>
+        <in>defaultFont.c</in>
+        <in>materiam.c</in>
+        <in>minipixel.c</in>
+        <in>mono_mid.c</in>
+        <in>msShell14.c</in>
+        <in>nullfont.c</in>
+        <in>orbitron14.c</in>
+        <in>square_small.c</in>
+        <in>temp.c</in>
+        <in>tempbig.c</in>
+        <in>tempnumbers.c</in>
+        <in>titlingCaps.c</in>
+        <in>unborn_small.c</in>
+      </df>
+      <df name="icons">
+        <in>battery.c</in>
+        <in>mixer1.c</in>
+        <in>spkOff.c</in>
+        <in>spkOn.c</in>
+        <in>wifi.c</in>
+        <in>world.c</in>
+      </df>
       <in>colors.h</in>
       <in>dotstar.h</in>
       <in>grafino.h</in>
+      <in>i2ccomms.c</in>
+      <in>i2ccomms.h</in>
       <in>ili9163.c</in>
       <in>ili9163.h</in>
       <in>ili9163_registers.h</in>
@@ -51,8 +81,9 @@
         <runcommandpicklist>
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
           <runcommandpicklistitem>edbg -b -t samd21 -vp -f zephyr/zephyr.bin</runcommandpicklistitem>
+          <runcommandpicklistitem>edbg -b -t samd21 -p -f zephyr/zephyr.bin</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>edbg -b -t samd21 -vp -f zephyr/zephyr.bin</runcommand>
+        <runcommand>edbg -b -t samd21 -p -f zephyr/zephyr.bin</runcommand>
         <rundir>/home/mufufu/opt/zephyr/zephyrmaster/proyectos/grafino/build</rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>

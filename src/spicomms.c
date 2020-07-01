@@ -46,7 +46,7 @@ void startSPICommCenter() {
 
 
 // Transmit command & data
-void transmit(u8_t cmd, void *tx_data, size_t tx_len) {
+void transmit(uint8_t cmd, void *tx_data, size_t tx_len) {
     struct spi_buf tx_buf = {.buf = &cmd, .len = 1};
     struct spi_buf_set tx_bufs = {.buffers = &tx_buf, .count = 1};
     gpio_pin_set(gpio_dev, DC_PIN, SEND_COMMAND);
@@ -61,7 +61,7 @@ void transmit(u8_t cmd, void *tx_data, size_t tx_len) {
 }
 
 // Transmit Command
-void transmitCommand(u8_t cmd) {
+void transmitCommand(uint8_t cmd) {
     struct spi_buf tx_buf = {.buf = &cmd, .len = 1};
     struct spi_buf_set tx_bufs = {.buffers = &tx_buf, .count = 1};
     gpio_pin_set(gpio_dev, DC_PIN, SEND_COMMAND);
@@ -75,10 +75,10 @@ void transmitData(void *tx_data, size_t tx_len) {
     spi_transceive(spi_dev, &spi_cfg, &tx_bufs,NULL);
 }
 
-void sendData16(u16_t data) {
-    u8_t bytes[2];
-    bytes[0] =  *((u8_t*)&(data)+1); //high byte
-    bytes[1] =  *((u8_t*)&(data)+0); //low byte
+void sendData16(uint16_t data) {
+    uint8_t bytes[2];
+    bytes[0] =  *((uint8_t*)&(data)+1); //high byte
+    bytes[1] =  *((uint8_t*)&(data)+0); //low byte
     transmitData(&bytes, 2);
 }
 
